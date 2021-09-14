@@ -2,27 +2,27 @@
 
 <head>
     
-<title>使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘</title>
+<title>使用 Go 和 ReactJS 构建聊天系统(六)：Docker 化后端 - 摸鱻的池塘</title>
 
-<meta property="og:title" content="使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘">
-
-
-
-    
+<meta property="og:title" content="使用 Go 和 ReactJS 构建聊天系统(六)：Docker 化后端 - 摸鱻的池塘">
 
 
 
     
-    <meta property="description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
-    <meta property="og:description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
+
+
+
+    
+    <meta property="description" content="项目完整源码
+[&amp;hellip;] 在本节中，我们将专注于将 Docker 添加到我们的后端应用程序中。
+您现在可能会问为什么我们要这样做？ 因为在我们研究身份验证，负载平衡和部署之类的东西之前，最好有一种使用容器化技术来部署我们的应用程序的标准方法。
+[&amp;hellip;] 如果这是您第一次了解 Docker 和容器化技术，那么您可能会质疑我们为什么使用它？
+对我来说，主要的原因之一是它使部署变得 &amp;hellip;">
+    <meta property="og:description" content="项目完整源码
+[&amp;hellip;] 在本节中，我们将专注于将 Docker 添加到我们的后端应用程序中。
+您现在可能会问为什么我们要这样做？ 因为在我们研究身份验证，负载平衡和部署之类的东西之前，最好有一种使用容器化技术来部署我们的应用程序的标准方法。
+[&amp;hellip;] 如果这是您第一次了解 Docker 和容器化技术，那么您可能会质疑我们为什么使用它？
+对我来说，主要的原因之一是它使部署变得 &amp;hellip;">
     
 
 
@@ -106,7 +106,7 @@
                                 <div class="post-container">
                                     <div class="post-header">
                                         <h2 class="post-title">
-                                            <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE/">使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目</a>
+                                            <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E5%85%ADdocker-%E5%8C%96%E5%90%8E%E7%AB%AF/">使用 Go 和 ReactJS 构建聊天系统(六)：Docker 化后端</a>
                                         </h2>
                                         
                                         <div class="post-byline">Published on
@@ -119,86 +119,53 @@
                                         
                                     </div>
                                     <div class="post-content">
-                                        <p>我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。</p>
-<h1 id="目标">目标</h1>
-<p>在本节课程结束后，你将得到:</p>
-<ul>
-<li>在  <code>backend/</code> 目录创建的基本的 Go 应用。</li>
-<li>在 <code>frontend/</code> 目录创建的基本的 ReactJS 应用。</li>
-</ul>
-<p>实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。</p>
-<h1 id="准备工作">准备工作</h1>
-<p>为了完成本系列教程，您需要做以下准备工作。</p>
-<ul>
-<li>你需要安装 <code>npm</code>。</li>
-<li>你需要安装 <code>npx</code>。它可以通过 <code>npm install -g npx</code> 来安装。</li>
-<li>你的 Go 版本需要高于 1.11。</li>
-<li>您将需要一个代码编辑器，如 Visual Studio。</li>
-</ul>
-<h1 id="设置-go-项目">设置 Go 项目</h1>
-<p>如果您熟悉 Go，这一步相当简单，我们将在项目目录中创建一个名为 <code>backend</code> 的目录。</p>
-<p>这个 <code>backend</code> 目录将存放这个项目的所有 Go 代码。然后，我们将通过以下命令来初始化我们的项目：:</p>
-<pre><code>$ cd backend
-$ GO111MODULE=on
-$ go mod init github.com/TutorialEdge/realtime-chat-go-react
-</code></pre><p>应该在 backend 目录中使用 go mod 初始化我们的项目，初始化之后我们就可以开始写项目并使其成为一个完整的 Go 应用程序。</p>
-<p>一旦你执行了这些命令，你就应该在 <code>backend/</code> 目录下看到两个新生成的文件。它们分别是 <code>go.mod</code> 和 <code>go.sum</code> 文件。</p>
-<ul>
-<li><strong>go.mod</strong> - 这个文件有点像 NodeJS 项目中的 package.json。它详细描述了我们项目所需的包和版本，以便项目的构建和运行。</li>
-<li><strong>go.sum</strong> - 这个文件用于校验，它记录了每个依赖库的版本和校验码。</li>
-</ul>
-<blockquote>
-<p><strong>注意 -</strong> 如果想要了解更多关于 Go modules 的新特性，请访问官方 Wiki: <a href="https://github.com/golang/go/wiki/Modules">Go Modules</a></p>
+                                        <blockquote>
+<p><a href="https://github.com/SmauelL/realtime-chat-go-react">项目完整源码</a></p>
 </blockquote>
-<h2 id="检查">检查</h2>
-<p>一旦我们在 <code>backend/</code> 目录中调用了 <code>go mod init</code>，我们将检查程序是否正常工作。</p>
-<p>在 <code>backend/</code> 目录中添加新文件 <code>main.go</code>，并添加以下代码:</p>
-<pre><code>package main
-
-import &quot;fmt&quot;
-
-func main() {
-  fmt.Println(&quot;Chat App v0.01&quot;)
-}
-</code></pre><p>保存文件, 尝试运行它：</p>
-<pre><code>$ go run main.go
-Chat App v0.01
-</code></pre><p>很好，如果运行成功，我们就可以继续设置前端应用了。</p>
-<h1 id="设置我们的-react-前端">设置我们的 React 前端</h1>
-<p>设置我们的前端稍微复杂一些，首先，我们将在项目的根目录中创建另一个目录，名为 <code>frontend</code>，我们在这个目录中存放所有 ReactJS 代码。</p>
+<p>在本节中，我们将专注于将 Docker 添加到我们的后端应用程序中。</p>
+<p>您现在可能会问为什么我们要这样做？ 因为在我们研究身份验证，负载平衡和部署之类的东西之前，最好有一种使用容器化技术来部署我们的应用程序的标准方法。</p>
+<h1 id="为什么选择-docker-">为什么选择 Docker ?</h1>
+<p>如果这是您第一次了解 Docker 和容器化技术，那么您可能会质疑我们为什么使用它？</p>
+<p>对我来说，主要的原因之一是它使部署变得非常容易。您可以将基于 Docker 的应用程序部署到支持 Docker 的任何服务器或平台。</p>
+<p>这意味着无论您将其部署到何处，都可以使用单个命令来启动应用程序。</p>
+<p>不仅如此，它还消除了「它可以在我的机器上工作」的问题，因为在 <code>Dockerfile</code> 中，您指定了应用程序启动所需的确切环境。</p>
+<h1 id="开始">开始</h1>
+<p>您需要做的第一件事是在您的机器上安装 Docker。这可以在这里完成: <a href="https://www.docker.com/get-started">Docker - 开始</a></p>
+<p>一旦您安装了 docker 并使其在本地运行，我们就可以深入创建 <code>Dockerfile</code> 了：</p>
+<pre><code>FROM golang:1.11.1-alpine3.8
+RUN mkdir /app
+ADD . /app/
+WORKDIR /app
+RUN go mod download
+RUN go build -o main ./...
+CMD [&quot;/app/main&quot;]
+</code></pre><p>定义 <code>Dockerfile</code> 后，我们可以继续使用 <code>docker</code> cli 构建我们的 Docker 镜像：</p>
 <blockquote>
-<p><strong>注意 -</strong> 我们将会使用 <a href="https://github.com/facebook/create-react-app">facebook/create-react-app</a> 来生成 React 前端。</p>
+<p><strong>注意：</strong> 如果您的网络速度很慢，则下一条命令可能需要一段时间才能执行，但是由于缓存，后续命令的执行速度会大大提高。</p>
 </blockquote>
-<pre><code>$ cd frontend
-</code></pre><p>然后使用 <code>create-react-app</code> 包来创建一个新的 ReactJS 应用。 可以使用 <code>npm</code> 来安装:</p>
-<pre><code>$ npm install -g create-react-app
-</code></pre><p>安装之后，可以使用以下命令创建新的 ReactJS 应用程序：</p>
-<pre><code>$ npx create-react-app .
-</code></pre><p>运行这些命令之后，你应该可以看到我们的 <code>frontend/</code> 目录生成了基本的 ReactJS 应用程序。</p>
-<p>我们的目录结构如下:</p>
-<pre><code>node_modules/
-public/
-src/
-.gitignore
-package.json
-README.md
-yarn.lock
-</code></pre><h2 id="在本地运行-reactjs-应用程序">在本地运行 ReactJS 应用程序</h2>
-<p>现在你应该成功创建了基础的 ReactJS 应用，是时候测试一下了。使用下面的命令尝试运行：</p>
-<pre><code>$ npm start
-</code></pre><p>如果一切按计划进行，你将看到 ReactJS 应用程序已经编译完毕，并且已经运行在本地服务器上，可以通过访问 <code>http://localhost:3000</code> 来查看:</p>
-<pre><code>Compiled successfully!
-
-You can now view frontend in the browser.
-
-  Local:            http://localhost:3000/
-  On Your Network:  http://192.168.1.234:3000/
-
-Note that the development build is not optimized.
-To create a production build, use yarn build.
-</code></pre><p>很好，您现在有了一个基本的 ReactJS，可以在本教程系列的下一部分中进行扩展。</p>
+<pre><code>$ docker build -t backend .
+Sending build context to Docker daemon  11.26kB
+Step 1/8 : FROM golang:1.11.1-alpine3.8
+ ---&gt; 95ec94706ff6
+Step 2/8 : RUN apk add bash ca-certificates git gcc g++ libc-dev
+ ---&gt; Running in 763630b369ca
+ ...
+</code></pre><p>成功完成 <code>build</code> 步骤后，我们可以尝试这样运行：</p>
+<pre><code>$ docker run -it -p 8080:8080 backend
+Distributed Chat App v0.01
+WebSocket Endpoint Hit
+Size of Connection Pool:  1
+&amp;{ 0xc000124000 0xc0000902a0 {0 0}}
+Message Received: {Type:1 Body:test}
+Sending message to all clients in Pool
+</code></pre><p>如您所见，在运行此命令并刷新客户端后，我们可以看到现在连接到 Docker-ized 的应用程序的连接，并且可以看到日志文件正在打印到终端上。</p>
+<p>如果我们现在想把这个应用程序部署到 AWS 之类的应用程序上，我们已经大大简化了这方面的工作。我们可以利用 AWS 的弹性容器服务来部署和运行我们的容器，只需几个命令。</p>
+<p>相反，如果我们想使用谷歌的云，我们可以将其部署到他们的容器中，而不需要额外的工作！这只是容器化对发展的巨大好处之一。</p>
+<h1 id="前端没有-docker-吗">前端没有 Docker 吗？</h1>
+<p>在这一点上，您可能想知道为什么我们对 <code>frontend/</code> 应用程序没有做同样的事情？原因是我们打算将此前端应用程序部署到 AWS S3 存储桶之类的应用程序中。</p>
+<p>在生产时，我们不需要任何花哨的前端服务，我们只需要能够可靠地服务于内置前端文件的东西。</p>
 <h1 id="总结">总结</h1>
-<p>太棒了，你现在已经成功地设置了我们项目的前端和后端，我们可以开始添加新的功能了。</p>
+<p>因此，在本节中，我们设法将 Docker 添加到我们的后端应用程序中，以及在继续开发和部署方面如何使我们（对于开发人员）受益。</p>
 <blockquote>
 <p>本文译自<a href="https://tutorialedge.net/projects/chat-system-in-go-and-react/">tutorialedge</a></p>
 </blockquote>
@@ -223,13 +190,13 @@ To create a production build, use yarn build.
                                             
                                             <div class="previous">
                                                 <span>&lt;&lt; Prev</span>
-                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%89%E8%AE%BE%E8%AE%A1%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E7%AB%AF/"
-                                                    rel="prev">使用 Go 和 ReactJS 构建聊天系统(三)：设计我们的前端</a> </div>
+                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E5%9B%9B%E5%A4%84%E7%90%86%E5%A4%9A%E4%B8%AA%E5%AE%A2%E6%88%B7%E7%AB%AF/"
+                                                    rel="prev">使用 Go 和 ReactJS 构建聊天系统(四)：处理多个客户端</a> </div>
                                             
                                             
                                             <div class="next">
                                                 <span>Next >></span>
-                                                <a href="/post/%E4%B8%80%E6%96%87%E8%AF%A6%E8%A7%A3%E5%BE%AE%E6%9C%8D%E5%8A%A1/">一文详解微服务</a> 
+                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%94%E6%94%B9%E5%96%84%E5%89%8D%E7%AB%AF/">使用 Go 和 ReactJS 构建聊天系统(五)：改善前端</a> 
                                             </div>
                                             
                                         </nav>

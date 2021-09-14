@@ -2,27 +2,25 @@
 
 <head>
     
-<title>使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘</title>
+<title>使用 Go 和 ReactJS 构建聊天系统(二)：简单通讯 - 摸鱻的池塘</title>
 
-<meta property="og:title" content="使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘">
-
-
-
-    
+<meta property="og:title" content="使用 Go 和 ReactJS 构建聊天系统(二)：简单通讯 - 摸鱻的池塘">
 
 
 
     
-    <meta property="description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
-    <meta property="og:description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
+
+
+
+    
+    <meta property="description" content="现在我们已经建立了基本的前端和后端，是时候对它们进行实际操作了。
+在本节中，我们将实现一个基本的 WebSocket 服务器。
+在本节结束后，我们将拥有一个前端应用程序，它可以以双向方式与后端直接通信。
+[&amp;hellip;] 让我们从后端 WebSocket 服务器开始。我们将使用 github.com/gorilla/websocket 包来设置 WebSocket 端点， &amp;hellip;">
+    <meta property="og:description" content="现在我们已经建立了基本的前端和后端，是时候对它们进行实际操作了。
+在本节中，我们将实现一个基本的 WebSocket 服务器。
+在本节结束后，我们将拥有一个前端应用程序，它可以以双向方式与后端直接通信。
+[&amp;hellip;] 让我们从后端 WebSocket 服务器开始。我们将使用 github.com/gorilla/websocket 包来设置 WebSocket 端点， &amp;hellip;">
     
 
 
@@ -106,7 +104,7 @@
                                 <div class="post-container">
                                     <div class="post-header">
                                         <h2 class="post-title">
-                                            <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE/">使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目</a>
+                                            <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%8C%E7%AE%80%E5%8D%95%E9%80%9A%E8%AE%AF/">使用 Go 和 ReactJS 构建聊天系统(二)：简单通讯</a>
                                         </h2>
                                         
                                         <div class="post-byline">Published on
@@ -119,86 +117,194 @@
                                         
                                     </div>
                                     <div class="post-content">
-                                        <p>我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。</p>
-<h1 id="目标">目标</h1>
-<p>在本节课程结束后，你将得到:</p>
-<ul>
-<li>在  <code>backend/</code> 目录创建的基本的 Go 应用。</li>
-<li>在 <code>frontend/</code> 目录创建的基本的 ReactJS 应用。</li>
-</ul>
-<p>实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。</p>
-<h1 id="准备工作">准备工作</h1>
-<p>为了完成本系列教程，您需要做以下准备工作。</p>
-<ul>
-<li>你需要安装 <code>npm</code>。</li>
-<li>你需要安装 <code>npx</code>。它可以通过 <code>npm install -g npx</code> 来安装。</li>
-<li>你的 Go 版本需要高于 1.11。</li>
-<li>您将需要一个代码编辑器，如 Visual Studio。</li>
-</ul>
-<h1 id="设置-go-项目">设置 Go 项目</h1>
-<p>如果您熟悉 Go，这一步相当简单，我们将在项目目录中创建一个名为 <code>backend</code> 的目录。</p>
-<p>这个 <code>backend</code> 目录将存放这个项目的所有 Go 代码。然后，我们将通过以下命令来初始化我们的项目：:</p>
-<pre><code>$ cd backend
-$ GO111MODULE=on
-$ go mod init github.com/TutorialEdge/realtime-chat-go-react
-</code></pre><p>应该在 backend 目录中使用 go mod 初始化我们的项目，初始化之后我们就可以开始写项目并使其成为一个完整的 Go 应用程序。</p>
-<p>一旦你执行了这些命令，你就应该在 <code>backend/</code> 目录下看到两个新生成的文件。它们分别是 <code>go.mod</code> 和 <code>go.sum</code> 文件。</p>
-<ul>
-<li><strong>go.mod</strong> - 这个文件有点像 NodeJS 项目中的 package.json。它详细描述了我们项目所需的包和版本，以便项目的构建和运行。</li>
-<li><strong>go.sum</strong> - 这个文件用于校验，它记录了每个依赖库的版本和校验码。</li>
-</ul>
-<blockquote>
-<p><strong>注意 -</strong> 如果想要了解更多关于 Go modules 的新特性，请访问官方 Wiki: <a href="https://github.com/golang/go/wiki/Modules">Go Modules</a></p>
-</blockquote>
-<h2 id="检查">检查</h2>
-<p>一旦我们在 <code>backend/</code> 目录中调用了 <code>go mod init</code>，我们将检查程序是否正常工作。</p>
-<p>在 <code>backend/</code> 目录中添加新文件 <code>main.go</code>，并添加以下代码:</p>
+                                        <p>现在我们已经建立了基本的前端和后端，是时候对它们进行实际操作了。</p>
+<p>在本节中，我们将实现一个基本的 WebSocket 服务器。</p>
+<p>在本节结束后，我们将拥有一个前端应用程序，它可以以双向方式与后端直接通信。</p>
+<h1 id="服务器">服务器</h1>
+<p>让我们从后端 WebSocket 服务器开始。我们将使用 <a href="http://github.com/gorilla/websocket">github.com/gorilla/websocket</a> 包来设置 WebSocket 端点，并对 WebSocket 连接进行读写。</p>
+<p>为了安装它，我们需要在  <code>backend/</code> 目录运行下面的命令：</p>
+<pre><code>$ go get github.com/gorilla/websocket
+</code></pre><p>安装完成后，就可以开始构建 web 服务器了。我们首先将创建一个非常简单的 <code>net/http</code> 服务器:</p>
 <pre><code>package main
 
-import &quot;fmt&quot;
+import (
+    &quot;fmt&quot;
+    &quot;net/http&quot;
+)
+
+func setupRoutes() {
+    http.HandleFunc(&quot;/&quot;, func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, &quot;Simple Server&quot;)
+    })
+}
 
 func main() {
-  fmt.Println(&quot;Chat App v0.01&quot;)
+    setupRoutes()
+    http.ListenAndServe(&quot;:8080&quot;, nil)
 }
-</code></pre><p>保存文件, 尝试运行它：</p>
-<pre><code>$ go run main.go
-Chat App v0.01
-</code></pre><p>很好，如果运行成功，我们就可以继续设置前端应用了。</p>
-<h1 id="设置我们的-react-前端">设置我们的 React 前端</h1>
-<p>设置我们的前端稍微复杂一些，首先，我们将在项目的根目录中创建另一个目录，名为 <code>frontend</code>，我们在这个目录中存放所有 ReactJS 代码。</p>
+</code></pre><p>它将运行在 <code>http://localhost:8080</code> 上，可以通过 <code>go run main.go</code> 来启动它。如果你打开浏览器这个网址，你将会看到页面输出 <code>Simple Server</code>。</p>
+<h1 id="websocket-协议">WebSocket 协议</h1>
+<p>在我们开始之前，有必要介绍一下它的工作原理。</p>
+<p>基本上，WebSocket 通过 TCP 套接字连接为我们提供了从不可信源到服务器的双向通信。从本质上讲，这意味着，我们不必继续轮询我们的 Web 服务器以获取更新，而且不必每次轮询都必须执行 TCP 握手，而是可以维护单个 TCP 套接字连接，然后在该套接字上发送和侦听消息。</p>
+<p>这大大减少了任何实时应用程序所需的网络开销，并且使我们能够在单个服务器实例上维护数量惊人的客户端。</p>
+<h2 id="缺点">缺点</h2>
+<p>WebSocket 肯定会有一些缺点。引入状态后，跨多个实例扩展应用程序就变得更加复杂。</p>
+<p>您必须考虑一些解决办法，比如将状态存储在消息代理中，或者存储在可以与应用程序实例并行扩展的数据库/内存缓存中。</p>
+<h2 id="实现">实现</h2>
+<p>在实现 WebSocket 端点时，我们需要创建一个新的端点，然后将连接从标准 HTTP 端点升级为持久的 WebSocket 连接。</p>
+<p>值得庆幸的是，<code>gorilla/websocket</code> 包提供了我们需要的功能，以便轻松地将 HTTP 连接升级为 WebSocket 连接。</p>
 <blockquote>
-<p><strong>注意 -</strong> 我们将会使用 <a href="https://github.com/facebook/create-react-app">facebook/create-react-app</a> 来生成 React 前端。</p>
+<p><strong>注意 -</strong> 你可以在这里阅读更多关于官方 WebSocket 协议的信息: <a href="https://tools.ietf.org/html/rfc6455">RFC-6455</a></p>
 </blockquote>
-<pre><code>$ cd frontend
-</code></pre><p>然后使用 <code>create-react-app</code> 包来创建一个新的 ReactJS 应用。 可以使用 <code>npm</code> 来安装:</p>
-<pre><code>$ npm install -g create-react-app
-</code></pre><p>安装之后，可以使用以下命令创建新的 ReactJS 应用程序：</p>
-<pre><code>$ npx create-react-app .
-</code></pre><p>运行这些命令之后，你应该可以看到我们的 <code>frontend/</code> 目录生成了基本的 ReactJS 应用程序。</p>
-<p>我们的目录结构如下:</p>
-<pre><code>node_modules/
-public/
-src/
-.gitignore
-package.json
-README.md
-yarn.lock
-</code></pre><h2 id="在本地运行-reactjs-应用程序">在本地运行 ReactJS 应用程序</h2>
-<p>现在你应该成功创建了基础的 ReactJS 应用，是时候测试一下了。使用下面的命令尝试运行：</p>
-<pre><code>$ npm start
-</code></pre><p>如果一切按计划进行，你将看到 ReactJS 应用程序已经编译完毕，并且已经运行在本地服务器上，可以通过访问 <code>http://localhost:3000</code> 来查看:</p>
-<pre><code>Compiled successfully!
+<h1 id="创建-websocket-端点">创建 WebSocket 端点</h1>
+<p>既然我们已经涵盖了理论，那么让我们看看如何在实践中做到这一点。 让我们创建一个新的端点 <code>/ws</code>，将其从标准的 <code>http</code> 端点转换为 <code>ws</code> 端点。</p>
+<p>这个端点将做三件事，它将检查我们传入的 <code>HTTP</code> 请求的来源，然后给打开我们的端点到每个客户端返回 <code>true</code> 。然后，我们将尝试使用定义的 <code>upgrader</code> 来升级连接。</p>
+<p>最后，我们将开始侦听传入的消息，然后简单地将它们打印出来并回显到相同的连接。这将允许我们从我们新创建的 WebSocket 端点来验证我们的前端可以连接和发送/接收消息：</p>
+<pre><code>package main
 
-You can now view frontend in the browser.
+import (
+    &quot;fmt&quot;
+    &quot;io&quot;
+    &quot;log&quot;
+    &quot;net/http&quot;
 
-  Local:            http://localhost:3000/
-  On Your Network:  http://192.168.1.234:3000/
+    &quot;github.com/gorilla/websocket&quot;
+)
 
-Note that the development build is not optimized.
-To create a production build, use yarn build.
-</code></pre><p>很好，您现在有了一个基本的 ReactJS，可以在本教程系列的下一部分中进行扩展。</p>
+// 我们去定义一个 Upgrader
+// 这需要一个 Read 和 Write 的缓冲大小
+var upgrader = websocket.Upgrader{
+    ReadBufferSize:  1024,
+  WriteBufferSize: 1024,
+
+  // 我们需要检查连接的来源
+  // 这将允许我们根据我们的 React 发出请求
+  // 现在,我们将不检查就允许任何连接
+  CheckOrigin: func(r *http.Request) bool { return true },
+}
+
+// 定义 reader 来侦听
+// 新消息将会发送到我们的 WebSocket
+// 端点
+func reader(conn *websocket.Conn) {
+    for {
+    // 读取信息
+        messageType, p, err := conn.ReadMessage()
+        if err != nil {
+            log.Println(err)
+            return
+        }
+    // 为了清晰，打印消息
+        fmt.Println(string(p))
+
+        if err := conn.WriteMessage(messageType, p); err != nil {
+            log.Println(err)
+            return
+        }
+
+    }
+}
+
+// 定义我们的 WebSocket 端点
+func serveWs(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r.Host)
+
+  // 将此连接升级到 WebSocket
+  // 连接
+    ws, err := upgrader.Upgrade(w, r, nil)
+    if err != nil {
+        log.Println(err)
+  }
+  // 持续监听新消息
+  // 通过我们的 WebSocket 连接
+    reader(ws)
+}
+
+func setupRoutes() {
+  http.HandleFunc(&quot;/&quot;, func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, &quot;Simple Server&quot;)
+  })
+  // 将我们的 `/ws` 端点映射到 `serveWs` 函数
+    http.HandleFunc(&quot;/ws&quot;, serveWs)
+}
+
+func main() {
+    fmt.Println(&quot;Chat App v0.01&quot;)
+    setupRoutes()
+    http.ListenAndServe(&quot;:8080&quot;, nil)
+}
+</code></pre><p>如果一切按计划进行，您应该能够通过调用 <code>go run main.go</code> 来运行它，它将自动启动我们的服务器。</p>
+<h1 id="客户端">客户端</h1>
+<p>现在我们已经设置了服务器，我们需要一些能够与它交互的东西。这就是我们的 ReactJS 前端发挥作用的地方。</p>
+<p>我们将保持相对简单的风格，并定义一个包含 WebSocket 连接代码的 <code>api/index.js</code> 文件。</p>
+<pre><code>// api/index.js
+var socket = new WebSocket(&quot;ws://localhost:8080/ws&quot;);
+
+let connect = () =&gt; {
+  console.log(&quot;Attempting Connection...&quot;);
+
+  socket.onopen = () =&gt; {
+    console.log(&quot;Successfully Connected&quot;);
+  };
+
+  socket.onmessage = msg =&gt; {
+    console.log(msg);
+  };
+
+  socket.onclose = event =&gt; {
+    console.log(&quot;Socket Closed Connection: &quot;, event);
+  };
+
+  socket.onerror = error =&gt; {
+    console.log(&quot;Socket Error: &quot;, error);
+  };
+};
+
+let sendMsg = msg =&gt; {
+  console.log(&quot;sending msg: &quot;, msg);
+  socket.send(msg);
+};
+
+export { connect, sendMsg };
+
+</code></pre><p>因此，在上面的代码中，我们定义了两个随后导出的函数。它们是 <code>connect()</code> 和 <code>sendMsg(msg)</code>。</p>
+<p>首先，连接到 WebSocket 端点，并监听诸如成功连接 <code>onopen</code>之类的事件。如果它发现任何问题，如关闭套接字或出现错误，它将继续将这些问题打印到浏览器控制台。</p>
+<p>第二个功能是我们的 <code>sendMsg(msg)</code> 功能，它使我们能够使用 <code>socket.send()</code> 通过 WebSocket 连接从前端向后端发送消息。简单又漂亮!</p>
+<p>现在，让我们在 React 项目中更新 <code>App.js</code> 文件，并添加对 <code>connect()</code> 的调用，并创建一个触发我们 <code>sendMsg()</code> 函数的 <code>&lt;button/&gt;</code> 元素。</p>
+<pre><code>// App.js
+import React, { Component } from &quot;react&quot;;
+import &quot;./App.css&quot;;
+import { connect, sendMsg } from &quot;./api&quot;;
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    connect();
+  }
+
+  send() {
+    console.log(&quot;hello&quot;);
+    sendMsg(&quot;hello&quot;);
+  }
+
+  render() {
+    return (
+      &lt;div className=&quot;App&quot;&gt;
+        &lt;button onClick={this.send}&gt;Hit&lt;/button&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default App;
+
+</code></pre><p>成功编译后，我们应该在浏览器中看到一个单独的按钮元素，并且如果打开浏览器控制台，还应该看到它已经能够成功连接到运行在 <code>http://localhost:8080</code> 上的后端 WebSocket 服务器。</p>
+<blockquote>
+<p><strong>问题 -</strong> 单击此按钮会发生什么? 您在浏览器的控制台和后端的控制台中看到什么输出?</p>
+</blockquote>
 <h1 id="总结">总结</h1>
-<p>太棒了，你现在已经成功地设置了我们项目的前端和后端，我们可以开始添加新的功能了。</p>
+<p>到此结束本系列的第 2 节。 我们已经能够创建一个非常简单的 WebSocket 服务器，该服务器回显发送给它的所有消息。</p>
+<p>这一步是开发应用程序的关键的第一步，现在我们已经建立并运行了基础，我们可以开始着眼于实现基本的聊天功能并使应用程序有用！</p>
 <blockquote>
 <p>本文译自<a href="https://tutorialedge.net/projects/chat-system-in-go-and-react/">tutorialedge</a></p>
 </blockquote>
@@ -223,13 +329,13 @@ To create a production build, use yarn build.
                                             
                                             <div class="previous">
                                                 <span>&lt;&lt; Prev</span>
-                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%89%E8%AE%BE%E8%AE%A1%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E7%AB%AF/"
-                                                    rel="prev">使用 Go 和 ReactJS 构建聊天系统(三)：设计我们的前端</a> </div>
+                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%94%E6%94%B9%E5%96%84%E5%89%8D%E7%AB%AF/"
+                                                    rel="prev">使用 Go 和 ReactJS 构建聊天系统(五)：改善前端</a> </div>
                                             
                                             
                                             <div class="next">
                                                 <span>Next >></span>
-                                                <a href="/post/%E4%B8%80%E6%96%87%E8%AF%A6%E8%A7%A3%E5%BE%AE%E6%9C%8D%E5%8A%A1/">一文详解微服务</a> 
+                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%89%E8%AE%BE%E8%AE%A1%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E7%AB%AF/">使用 Go 和 ReactJS 构建聊天系统(三)：设计我们的前端</a> 
                                             </div>
                                             
                                         </nav>

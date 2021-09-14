@@ -2,27 +2,25 @@
 
 <head>
     
-<title>使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘</title>
+<title>使用 Go 和 ReactJS 构建聊天系统(五)：改善前端 - 摸鱻的池塘</title>
 
-<meta property="og:title" content="使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘">
-
-
-
-    
+<meta property="og:title" content="使用 Go 和 ReactJS 构建聊天系统(五)：改善前端 - 摸鱻的池塘">
 
 
 
     
-    <meta property="description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
-    <meta property="og:description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
+
+
+
+    
+    <meta property="description" content="欢迎来到本系列的第五节! 如果你已经走到了这，那么我真诚地希望你喜欢学习新的 Go 概念并在 Go 和 React 中建立自己的聊天系统！
+在本节中，我们将再次专注于前端，并对其进行改进，以便用户自定义聊天消息，并优化聊天消息的显式方式。
+让我们开始吧！
+[&amp;hellip;] 让我们在 frontend/ 目录下创建一个新 component 。这个组件本质上只会渲染一个 &amp;lt;input &amp;hellip;">
+    <meta property="og:description" content="欢迎来到本系列的第五节! 如果你已经走到了这，那么我真诚地希望你喜欢学习新的 Go 概念并在 Go 和 React 中建立自己的聊天系统！
+在本节中，我们将再次专注于前端，并对其进行改进，以便用户自定义聊天消息，并优化聊天消息的显式方式。
+让我们开始吧！
+[&amp;hellip;] 让我们在 frontend/ 目录下创建一个新 component 。这个组件本质上只会渲染一个 &amp;lt;input &amp;hellip;">
     
 
 
@@ -106,7 +104,7 @@
                                 <div class="post-container">
                                     <div class="post-header">
                                         <h2 class="post-title">
-                                            <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE/">使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目</a>
+                                            <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%94%E6%94%B9%E5%96%84%E5%89%8D%E7%AB%AF/">使用 Go 和 ReactJS 构建聊天系统(五)：改善前端</a>
                                         </h2>
                                         
                                         <div class="post-byline">Published on
@@ -119,86 +117,133 @@
                                         
                                     </div>
                                     <div class="post-content">
-                                        <p>我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。</p>
-<h1 id="目标">目标</h1>
-<p>在本节课程结束后，你将得到:</p>
-<ul>
-<li>在  <code>backend/</code> 目录创建的基本的 Go 应用。</li>
-<li>在 <code>frontend/</code> 目录创建的基本的 ReactJS 应用。</li>
-</ul>
-<p>实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。</p>
-<h1 id="准备工作">准备工作</h1>
-<p>为了完成本系列教程，您需要做以下准备工作。</p>
-<ul>
-<li>你需要安装 <code>npm</code>。</li>
-<li>你需要安装 <code>npx</code>。它可以通过 <code>npm install -g npx</code> 来安装。</li>
-<li>你的 Go 版本需要高于 1.11。</li>
-<li>您将需要一个代码编辑器，如 Visual Studio。</li>
-</ul>
-<h1 id="设置-go-项目">设置 Go 项目</h1>
-<p>如果您熟悉 Go，这一步相当简单，我们将在项目目录中创建一个名为 <code>backend</code> 的目录。</p>
-<p>这个 <code>backend</code> 目录将存放这个项目的所有 Go 代码。然后，我们将通过以下命令来初始化我们的项目：:</p>
-<pre><code>$ cd backend
-$ GO111MODULE=on
-$ go mod init github.com/TutorialEdge/realtime-chat-go-react
-</code></pre><p>应该在 backend 目录中使用 go mod 初始化我们的项目，初始化之后我们就可以开始写项目并使其成为一个完整的 Go 应用程序。</p>
-<p>一旦你执行了这些命令，你就应该在 <code>backend/</code> 目录下看到两个新生成的文件。它们分别是 <code>go.mod</code> 和 <code>go.sum</code> 文件。</p>
-<ul>
-<li><strong>go.mod</strong> - 这个文件有点像 NodeJS 项目中的 package.json。它详细描述了我们项目所需的包和版本，以便项目的构建和运行。</li>
-<li><strong>go.sum</strong> - 这个文件用于校验，它记录了每个依赖库的版本和校验码。</li>
-</ul>
-<blockquote>
-<p><strong>注意 -</strong> 如果想要了解更多关于 Go modules 的新特性，请访问官方 Wiki: <a href="https://github.com/golang/go/wiki/Modules">Go Modules</a></p>
-</blockquote>
-<h2 id="检查">检查</h2>
-<p>一旦我们在 <code>backend/</code> 目录中调用了 <code>go mod init</code>，我们将检查程序是否正常工作。</p>
-<p>在 <code>backend/</code> 目录中添加新文件 <code>main.go</code>，并添加以下代码:</p>
-<pre><code>package main
+                                        <p>欢迎来到本系列的第五节! 如果你已经走到了这，那么我真诚地希望你喜欢学习新的 Go 概念并在 Go 和 React 中建立自己的聊天系统！</p>
+<p>在本节中，我们将再次专注于前端，并对其进行改进，以便用户自定义聊天消息，并优化聊天消息的显式方式。</p>
+<p>让我们开始吧！</p>
+<h1 id="聊天输入组件">聊天输入组件</h1>
+<p>让我们在  <code>frontend/</code> 目录下创建一个新  <code>component</code> 。这个组件本质上只会渲染一个 <code>&lt;input /&gt;</code>，然后监听 <code>onKeyDown</code> 的所有事件。如果在焦点位于 <code>&lt;input /&gt;</code> 元素内的状态下注册了按键，它将触发我们稍后传递给这个组件的任何函数。</p>
+<pre><code>import React, { Component } from &quot;react&quot;;
+import &quot;./ChatInput.scss&quot;;
 
-import &quot;fmt&quot;
-
-func main() {
-  fmt.Println(&quot;Chat App v0.01&quot;)
+class ChatInput extends Component {
+  render() {
+    return (
+      &lt;div className=&quot;ChatInput&quot;&gt;
+        &lt;input onKeyDown={this.props.send} /&gt;
+      &lt;/div&gt;
+    );
+  }
 }
-</code></pre><p>保存文件, 尝试运行它：</p>
-<pre><code>$ go run main.go
-Chat App v0.01
-</code></pre><p>很好，如果运行成功，我们就可以继续设置前端应用了。</p>
-<h1 id="设置我们的-react-前端">设置我们的 React 前端</h1>
-<p>设置我们的前端稍微复杂一些，首先，我们将在项目的根目录中创建另一个目录，名为 <code>frontend</code>，我们在这个目录中存放所有 ReactJS 代码。</p>
-<blockquote>
-<p><strong>注意 -</strong> 我们将会使用 <a href="https://github.com/facebook/create-react-app">facebook/create-react-app</a> 来生成 React 前端。</p>
-</blockquote>
-<pre><code>$ cd frontend
-</code></pre><p>然后使用 <code>create-react-app</code> 包来创建一个新的 ReactJS 应用。 可以使用 <code>npm</code> 来安装:</p>
-<pre><code>$ npm install -g create-react-app
-</code></pre><p>安装之后，可以使用以下命令创建新的 ReactJS 应用程序：</p>
-<pre><code>$ npx create-react-app .
-</code></pre><p>运行这些命令之后，你应该可以看到我们的 <code>frontend/</code> 目录生成了基本的 ReactJS 应用程序。</p>
-<p>我们的目录结构如下:</p>
-<pre><code>node_modules/
-public/
-src/
-.gitignore
-package.json
-README.md
-yarn.lock
-</code></pre><h2 id="在本地运行-reactjs-应用程序">在本地运行 ReactJS 应用程序</h2>
-<p>现在你应该成功创建了基础的 ReactJS 应用，是时候测试一下了。使用下面的命令尝试运行：</p>
-<pre><code>$ npm start
-</code></pre><p>如果一切按计划进行，你将看到 ReactJS 应用程序已经编译完毕，并且已经运行在本地服务器上，可以通过访问 <code>http://localhost:3000</code> 来查看:</p>
-<pre><code>Compiled successfully!
 
-You can now view frontend in the browser.
+export default ChatInput;
+</code></pre><p>然后，我们将为新的输入组件定义一些样式。 这非常简单：</p>
+<pre><code>.ChatInput {
+  width: 95%;
+  display: block;
+  margin: auto;
 
-  Local:            http://localhost:3000/
-  On Your Network:  http://192.168.1.234:3000/
+  input {
+    padding: 10px;
+    margin: 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    width: 98%;
+    box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);
+  }
+}
+</code></pre><p>定义好组件和样式后，我们只需要导出即可。</p>
+<pre><code>import ChatInput from &quot;./ChatInput.jsx&quot;;
 
-Note that the development build is not optimized.
-To create a production build, use yarn build.
-</code></pre><p>很好，您现在有了一个基本的 ReactJS，可以在本教程系列的下一部分中进行扩展。</p>
-<h1 id="总结">总结</h1>
-<p>太棒了，你现在已经成功地设置了我们项目的前端和后端，我们可以开始添加新的功能了。</p>
+export default ChatInput;
+
+</code></pre><h2 id="更新我们的-appjs">更新我们的 App.js</h2>
+<p>好的，我们已经创建了 <code>ChatInput</code> 组件，可以更新 App.js 组件，使其使用这个新创建的组件并将已定义的 <code>send()</code> 函数传递给该组件。</p>
+<pre><code>render() {
+  return (
+    &lt;div className=&quot;App&quot;&gt;
+      &lt;Header /&gt;
+      &lt;ChatHistory chatHistory={this.state.chatHistory} /&gt;
+      &lt;ChatInput send={this.send} /&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre><p>我们传入了已定义的 <code>send()</code> 函数，该函数现在仅向我们的 WebSocket 端点发送一个简单的「Hello」。现在让我们对其进行更新，以使其包含触发它事件的上下文。</p>
+<p>通过传递此事件，我们将能够查询所按下的键是否为 <code>Enter</code> 键，如果是，则可以将我们的 <code>&lt;input /&gt;</code> 字段的值发送给我们 WebSocket 端点，然后清除该 <code>&lt;input /&gt;</code>：</p>
+<pre><code>send(event) {
+  if(event.keyCode === 13) {
+    sendMsg(event.target.value);
+    event.target.value = &quot;&quot;;
+  }
+}
+
+</code></pre><h2 id="尝试一下">尝试一下</h2>
+<p>现在我们已经创建了 <code>ChatInput</code> 组件，我们可以对其进行测试了。运行您的 Go WebSocket 服务器和前端，尝试发送一些自定义消息，然后查看是否一切正常.</p>
+<h1 id="改善我们的聊天记录组件">改善我们的聊天记录组件</h1>
+<p>目前，我们的聊天记录非常丑陋，但功能正常，可显示从 WebSocket 服务器向连接的客户端广播的每条消息。</p>
+<p>该消息只是以 JSON 格式原样显示，周围没有其他样式，因此，让我们来看看现在如何通过创建一个 <code>Message</code> 组件来改进消息的显式。</p>
+<h2 id="我们的消息组件">我们的消息组件</h2>
+<p>让我们从定义 <code>Message.jsx</code> 文件开始。该组件将接收需要通过 <code>prop</code> 显示的消息。然后它将解析 <code>prop</code> 称为 <code>message</code> 并将其存储在组件 <code>state</code> 中，然后我们可以在 <code>render</code> 功能中使用它。</p>
+<pre><code>// src/components/Message/Message.jsx
+import React, { Component } from &quot;react&quot;;
+import &quot;./Message.scss&quot;;
+
+class Message extends Component {
+  constructor(props) {
+    super(props);
+    let temp = JSON.parse(this.props.message);
+    this.state = {
+      message: temp
+    };
+  }
+
+  render() {
+    return &lt;div className=&quot;Message&quot;&gt;{this.state.message.body}&lt;/div&gt;;
+  }
+}
+
+export default Message;
+</code></pre><p>和往常一样，我们需要定义一个 <code>index.js</code> 的文件:</p>
+<pre><code>// src/components/Message/index.js
+import Message from &quot;./Message.jsx&quot;;
+
+export default Message;
+
+</code></pre><p>现在，我们来看看组件的样式。我们将消息显示在一个框中，并加上一些 <code>box-shadow</code> ，让我们的聊天更具视觉深度。</p>
+<pre><code>.Message {
+  display: block;
+  background-color: white;
+  margin: 10px auto;
+  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border-radius: 5px;
+  clear: both;
+
+  &amp;.me {
+    color: white;
+    float: right;
+    background-color: #328ec4;
+  }
+}
+</code></pre><h2 id="更新我们的聊天记录组件">更新我们的聊天记录组件</h2>
+<p>现在我们已经创建了这个 <code>Message</code> 组件，我们可以在我们的 <code>ChatHistory</code> 组件中开始使用它了。为了做到这一点，我们需要像这样更新 <code>render()</code> 函数：</p>
+<pre><code>render() {
+  console.log(this.props.chatHistory);
+  const messages = this.props.chatHistory.map(msg =&gt; &lt;Message message={msg.data} /&gt;);
+
+  return (
+    &lt;div className='ChatHistory'&gt;
+      &lt;h2&gt;Chat History&lt;/h2&gt;
+      {messages}
+    &lt;/div&gt;
+  );
+};
+</code></pre><p>在第三行，您将看到我们已经更新了 <code>.map</code> 函数，以返回一个 <code>&lt;Message /&gt;</code> 组件，并将消息 <code>prop</code> 设置为我们的 <code>msg.data</code>。随后，它将 JSON 字符串传递给每个消息组件，然后解析并呈现它。</p>
+<p>如果我们保存了所有内容，那么我们应该看到，只要我们从 WebSocket 端点收到新消息，它就会在我们的 <code>ChatHistory</code> 组件中完美的呈现出来！</p>
+<p><img src="https://cdn.learnku.com/uploads/images/202001/16/36517/m4QqJb3Tam.png!large" alt="Chat Application Screenshot"></p>
+<h1 id="结论">结论</h1>
+<p>在本节中，我们改进了现有的前端设计，并实现了将自定义消息发送回后端 WebSocket 服务器的功能。</p>
 <blockquote>
 <p>本文译自<a href="https://tutorialedge.net/projects/chat-system-in-go-and-react/">tutorialedge</a></p>
 </blockquote>
@@ -223,13 +268,13 @@ To create a production build, use yarn build.
                                             
                                             <div class="previous">
                                                 <span>&lt;&lt; Prev</span>
-                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%89%E8%AE%BE%E8%AE%A1%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E7%AB%AF/"
-                                                    rel="prev">使用 Go 和 ReactJS 构建聊天系统(三)：设计我们的前端</a> </div>
+                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E5%85%ADdocker-%E5%8C%96%E5%90%8E%E7%AB%AF/"
+                                                    rel="prev">使用 Go 和 ReactJS 构建聊天系统(六)：Docker 化后端</a> </div>
                                             
                                             
                                             <div class="next">
                                                 <span>Next >></span>
-                                                <a href="/post/%E4%B8%80%E6%96%87%E8%AF%A6%E8%A7%A3%E5%BE%AE%E6%9C%8D%E5%8A%A1/">一文详解微服务</a> 
+                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%8C%E7%AE%80%E5%8D%95%E9%80%9A%E8%AE%AF/">使用 Go 和 ReactJS 构建聊天系统(二)：简单通讯</a> 
                                             </div>
                                             
                                         </nav>

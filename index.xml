@@ -8,6 +8,44 @@
     <copyright>京ICP备2021023950号</copyright>
     <lastBuildDate>Mon, 13 Jan 2020 10:35:34 +0000</lastBuildDate><atom:link href="https://beian.miit.gov.cn/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>一文详解微服务</title>
+      <link>https://beian.miit.gov.cn/post/%E4%B8%80%E6%96%87%E8%AF%A6%E8%A7%A3%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E4%B8%80%E6%96%87%E8%AF%A6%E8%A7%A3%E5%BE%AE%E6%9C%8D%E5%8A%A1/</guid>
+      <description>本文将介绍微服务架构和相关的组件，介绍他们是什么以及为什么要使用微服务架构和这些组件。本文侧重于简明地表达微服务架构的全局图景，因此不会涉及具体如何使用组件等细节。
+ 要理解微服务，首先要先理解不是微服务的那些。通常跟微服务相对的是单体应用，即将所有功能都打包成在一个独立单元的应用程序。从单体应用到微服务并不是一蹴而就的，这是一个逐渐演变的过程。本文将以一个网上超市应用为例来说明这一过程。
+最初的需求 几年前，小明和小皮一起创业做网上超市。小明负责程序开发，小皮负责其他事宜。当时互联网还不发达，网上超市还是蓝海。只要功能实现了就能随便赚钱。所以他们的需求很简单，只需要一个网站挂在公网，用户能够在这个网站上浏览商品、购买商品；另外还需一个管理后台，可以管理商品、用户、以及订单数据。
+我们整理一下功能清单：
+ 网站 -用户注册、登录功能 -商品展示 -下单 -管理后台 -用户管理 -商品管理 -订单管理  由于需求简单，小明左手右手一个慢动作，网站就做好了。管理后台出于安全考虑，不和网站做在一起，小明右手左手慢动作重播，管理网站也做好了。总体架构图如下：
+小明挥一挥手，找了家云服务部署上去，网站就上线了。上线后好评如潮，深受各类肥宅喜爱。小明小皮美滋滋地开始躺着收钱。
+随着业务发展…… 好景不长，没过几天，各类网上超市紧跟着拔地而起，对小明小皮造成了强烈的冲击。
+在竞争的压力下，小明小皮决定开展一些营销手段：
+开展促销活动。比如元旦全场打折，春节买二送一，情人节狗粮优惠券等等。 拓展渠道，新增移动端营销。除了网站外，还需要开发移动端APP，微信小程序等。 精准营销。利用历史数据对用户进行分析，提供个性化服务。 …… 这些活动都需要程序开发的支持。小明拉了同学小红加入团队。小红负责数据分析以及移动端相关开发。小明负责促销活动相关功能的开发。
+因为开发任务比较紧迫，小明小红没有好好规划整个系统的架构，随便拍了拍脑袋，决定把促销管理和数据分析放在管理后台里，微信和移动端APP另外搭建。通宵了几天后，新功能和新应用基本完工。这时架构图如下：
+这一阶段存在很多不合理的地方：
+网站和移动端应用有很多相同业务逻辑的重复代码。 数据有时候通过数据库共享，有时候通过接口调用传输。接口调用关系杂乱。 单个应用为了给其他应用提供接口，渐渐地越改越大，包含了很多本来就不属于它的逻辑。应用边界模糊，功能归属混乱。 管理后台在一开始的设计中保障级别较低。加入数据分析和促销管理相关功能后出现性能瓶颈，影响了其他应用。 数据库表结构被多个应用依赖，无法重构和优化。 所有应用都在一个数据库上操作，数据库出现性能瓶颈。特别是数据分析跑起来的时候，数据库性能急剧下降。 开发、测试、部署、维护愈发困难。即使只改动一个小功能，也需要整个应用一起发布。有时候发布会不小心带上了一些未经测试的代码，或者修改了一个功能后，另一个意想不到的地方出错了。为了减轻发布可能产生的问题的影响和线上业务停顿的影响，所有应用都要在凌晨三四点执行发布。发布后为了验证应用正常运行，还得盯到第二天白天的用户高峰期…… 团队出现推诿扯皮现象。关于一些公用的功能应该建设在哪个应用上的问题常常要争论很久，最后要么干脆各做各的，或者随便放个地方但是都不维护。 尽管有着诸多问题，但也不能否认这一阶段的成果：快速地根据业务变化建设了系统。不过紧迫且繁重的任务容易使人陷入局部、短浅的思维方式，从而做出妥协式的决策。在这种架构中，每个人都只关注在自己的一亩三分地，缺乏全局的、长远的设计。长此以往，系统建设将会越来越困难，甚至陷入不断推翻、重建的循环。
+是时候做出改变了 幸好小明和小红是有追求有理想的好青年。意识到问题后，小明和小红从琐碎的业务需求中腾出了一部分精力，开始梳理整体架构，针对问题准备着手改造。
+要做改造，首先你需要有足够的精力和资源。如果你的需求方（业务人员、项目经理、上司等）很强势地一心追求需求进度，以致于你无法挪出额外的精力和资源的话，那么你可能无法做任何事……
+在编程的世界中，最重要的便是抽象能力。微服务改造的过程实际上也是个抽象的过程。小明和小红整理了网上超市的业务逻辑，抽象出公用的业务能力，做成几个公共服务：
+ 用户服务 -商品服务 -促销服务 -订单服务 -数据分析服务  各个应用后台只需从这些服务获取所需的数据，从而删去了大量冗余的代码，就剩个轻薄的控制层和前端。这一阶段的架构如下：
+这个阶段只是将服务分开了，数据库依然是共用的，所以一些烟囱式系统的缺点仍然存在：
+数据库成为性能瓶颈，并且有单点故障的风险。 数据管理趋向混乱。即使一开始有良好的模块化设计，随着时间推移，总会有一个服务直接从数据库取另一个服务的数据的现象。 数据库表结构可能被多个服务依赖，牵一发而动全身，很难调整。 如果一直保持共用数据库的模式，则整个架构会越来越僵化，失去了微服务架构的意义。因此小明和小红一鼓作气，把数据库也拆分了。所有持久化层相互隔离，由各个服务自己负责。另外，为了提高系统的实时性，加入了消息队列机制。架构如下：
+完全拆分后各个服务可以采用异构的技术。比如数据分析服务可以使用数据仓库作为持久化层，以便于高效地做一些统计计算；商品服务和促销服务访问频率比较大，因此加入了缓存机制等。
+还有一种抽象出公共逻辑的方法是把这些公共逻辑做成公共的框架库。这种方法可以减少服务调用的性能损耗。但是这种方法的管理成本非常高昂，很难保证所有应用版本的一致性。
+数据库拆分也有一些问题和挑战：比如说跨库级联的需求，通过服务查询数据颗粒度的粗细问题等。但是这些问题可以通过合理的设计来解决。总体来说，数据库拆分是一个利大于弊的。
+微服务架构还有一个技术外的好处，它使整个系统的分工更加明确，责任更加清晰，每个人专心负责为其他人提供更好的服务。在单体应用的时代，公共的业务功能经常没有明确的归属。最后要么各做各的，每个人都重新实现了一遍；要么是随机一个人（一般是能力比较强或者比较热心的人）做到他负责的应用里面。在后者的情况下，这个人在负责自己应用之外，还要额外负责给别人提供这些公共的功能——而这个功能本来是无人负责的，仅仅因为他能力较强/比较热心，就莫名地背锅（这种情况还被美其名曰能者多劳）。结果最后大家都不愿意提供公共的功能。长此以往，团队里的人渐渐变得各自为政，不再关心全局的架构设计。
+从这个角度上看，使用微服务架构同时也需要组织结构做相应的调整。所以说做微服务改造需要管理者的支持。
+改造完成后，小明和小红分清楚各自的锅。两人十分满意，一切就像是麦克斯韦方程组一样漂亮完美。
+然而……
+没有银弹 春天来了，万物复苏，又到了一年一度的购物狂欢节。眼看着日订单数量蹭蹭地上涨，小皮小明小红喜笑颜开。可惜好景不长，乐极生悲，突然嘣的一下，系统挂了。
+以往单体应用，排查问题通常是看一下日志，研究错误信息和调用堆栈。而微服务架构整个应用分散成多个服务，定位故障点非常困难。小明一个台机器一台机器地查看日志，一个服务一个服务地手工调用。经过十几分钟的查找，小明终于定位到故障点：促销服务由于接收的请求量太大而停止响应了。其他服务都直接或间接地会调用促销服务，于是也跟着宕机了。在微服务架构中，一个服务故障可能会产生雪崩效用，导致整个系统故障。其实在节前，小明和小红是有做过请求量评估的。按照预计，服务器资源是足以支持节日的请求量的，所以肯定是哪里出了问题。不过形势紧急，随着每一分每一秒流逝的都是白花花的银子，因此小明也没时间排查问题，当机立断在云上新建了几台虚拟机，然后一台一台地部署新的促销服务节点。几分钟的操作后，系统总算是勉强恢复正常了。整个故障时间内估计损失了几十万的销售额，三人的心在滴血……
+事后，小明简单写了个日志分析工具（量太大了，文本编辑器几乎打不开，打开了肉眼也看不过来），统计了促销服务的访问日志，发现在故障期间，商品服务由于代码问题，在某些场景下会对促销服务发起大量请求。这个问题并不复杂，小明手指抖一抖，修复了这个价值几十万的Bug。
+问题是解决了，但谁也无法保证不会再发生类似的其他问题。微服务架构虽然逻辑设计上看是完美的，但就像积木搭建的华丽宫殿一样，经不起风吹草动。微服务架构虽然解决了旧问题，也引入了新的问题：
+微服务架构整个应用分散成多个服务，定位故障点非常困难。 稳定性下降。服务数量变多导致其中一个服务出现故障的概率增大，并且一个服务故障可能导致整个系统挂掉。事实上，在大访问量的生产场景下，故障总是会出现的。 服务数量非常多，部署、管理的工作量很大。 开发方面：如何保证各个服务在持续开发的情况下仍然保持协同合作。 测试方面：服务拆分后，几乎所有功能都会涉及多个服务。原本单个程序的测试变为服务间调用的测试。测试变得更加复杂。 小明小红痛定思痛，决心好好解决这些问题。对故障的处理一般从两方面入手，一方面尽量减少故障发生的概率，另一方面降低故障造成的影响。</description>
+    </item>
+    
+    <item>
       <title>使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目</title>
       <link>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE/</link>
       <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
@@ -21,6 +59,159 @@
 这个 backend 目录将存放这个项目的所有 Go 代码。然后，我们将通过以下命令来初始化我们的项目：:
 $ cd backend $ GO111MODULE=on $ go mod init github.com/TutorialEdge/realtime-chat-go-react 应该在 backend 目录中使用 go mod 初始化我们的项目，初始化之后我们就可以开始写项目并使其成为一个完整的 Go 应用程序。
 一旦你执行了这些命令，你就应该在 backend/ 目录下看到两个新生成的文件。它们分别是 go.mod 和 go.</description>
+    </item>
+    
+    <item>
+      <title>使用 Go 和 ReactJS 构建聊天系统(三)：设计我们的前端</title>
+      <link>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%89%E8%AE%BE%E8%AE%A1%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E7%AB%AF/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%89%E8%AE%BE%E8%AE%A1%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E7%AB%AF/</guid>
+      <description>在本节中，我们将着眼于改进前端并充实该应用程序，使其看起来像一个正规的在线聊天应用程序。
+本节完成后的效果如下:
+基于组件的方法 在 React 以及所有其他流行的前端框架中，我们倾向于将应用程序划分为一系列组件。 每个组件通常代表应用程序上的一个元素，例如我们应用程序内的用户列表或聊天记录部分。
+这种基于组件的方法有很多优点，并且有效地允许较大的团队处理单个组件，而不必影响其他团队处理应用程序。这些组件为您提供了一定的 系统解耦，并且有效地允许您通过组合构建应用程序，并在逻辑上对目录结构进行分组。
+头部组件 让我们从创建一个简单的 Header 组件开始。为此，我们将在 frontend/src/ 目录下创建一个名为 components/ 的目录，并在其中创建 Header/ 目录，该目录将存放 Header 组件的所有文件。
+- src/ - - components/ - - - Header/ - - - - Header.jsx - - - - index.js - - - - Header.scss  注意 - 未来，无论何时创建新组件，我们都会在 components/ 目录中为其创建新目录，并且通常将在该目录中创建这三个文件。
+ Header.jsx 让我们在 Header.jsx 文件中实现我们的 function component。这将为我们的网站提供一个简单的标题：
+import React from &amp;quot;react&amp;quot;; import &amp;quot;./Header.scss&amp;quot;; const Header = () =&amp;gt; ( &amp;lt;div className=&amp;quot;header&amp;quot;&amp;gt; &amp;lt;h2&amp;gt;Realtime Chat App&amp;lt;/h2&amp;gt; &amp;lt;/div&amp;gt; ); export default Header; Header.</description>
+    </item>
+    
+    <item>
+      <title>使用 Go 和 ReactJS 构建聊天系统(二)：简单通讯</title>
+      <link>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%8C%E7%AE%80%E5%8D%95%E9%80%9A%E8%AE%AF/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%8C%E7%AE%80%E5%8D%95%E9%80%9A%E8%AE%AF/</guid>
+      <description>现在我们已经建立了基本的前端和后端，是时候对它们进行实际操作了。
+在本节中，我们将实现一个基本的 WebSocket 服务器。
+在本节结束后，我们将拥有一个前端应用程序，它可以以双向方式与后端直接通信。
+服务器 让我们从后端 WebSocket 服务器开始。我们将使用 github.com/gorilla/websocket 包来设置 WebSocket 端点，并对 WebSocket 连接进行读写。
+为了安装它，我们需要在 backend/ 目录运行下面的命令：
+$ go get github.com/gorilla/websocket 安装完成后，就可以开始构建 web 服务器了。我们首先将创建一个非常简单的 net/http 服务器:
+package main import ( &amp;quot;fmt&amp;quot; &amp;quot;net/http&amp;quot; ) func setupRoutes() { http.HandleFunc(&amp;quot;/&amp;quot;, func(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, &amp;quot;Simple Server&amp;quot;) }) } func main() { setupRoutes() http.ListenAndServe(&amp;quot;:8080&amp;quot;, nil) } 它将运行在 http://localhost:8080 上，可以通过 go run main.go 来启动它。如果你打开浏览器这个网址，你将会看到页面输出 Simple Server。
+WebSocket 协议 在我们开始之前，有必要介绍一下它的工作原理。
+基本上，WebSocket 通过 TCP 套接字连接为我们提供了从不可信源到服务器的双向通信。从本质上讲，这意味着，我们不必继续轮询我们的 Web 服务器以获取更新，而且不必每次轮询都必须执行 TCP 握手，而是可以维护单个 TCP 套接字连接，然后在该套接字上发送和侦听消息。</description>
+    </item>
+    
+    <item>
+      <title>使用 Go 和 ReactJS 构建聊天系统(五)：改善前端</title>
+      <link>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%94%E6%94%B9%E5%96%84%E5%89%8D%E7%AB%AF/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%BA%94%E6%94%B9%E5%96%84%E5%89%8D%E7%AB%AF/</guid>
+      <description>欢迎来到本系列的第五节! 如果你已经走到了这，那么我真诚地希望你喜欢学习新的 Go 概念并在 Go 和 React 中建立自己的聊天系统！
+在本节中，我们将再次专注于前端，并对其进行改进，以便用户自定义聊天消息，并优化聊天消息的显式方式。
+让我们开始吧！
+聊天输入组件 让我们在 frontend/ 目录下创建一个新 component 。这个组件本质上只会渲染一个 &amp;lt;input /&amp;gt;，然后监听 onKeyDown 的所有事件。如果在焦点位于 &amp;lt;input /&amp;gt; 元素内的状态下注册了按键，它将触发我们稍后传递给这个组件的任何函数。
+import React, { Component } from &amp;quot;react&amp;quot;; import &amp;quot;./ChatInput.scss&amp;quot;; class ChatInput extends Component { render() { return ( &amp;lt;div className=&amp;quot;ChatInput&amp;quot;&amp;gt; &amp;lt;input onKeyDown={this.props.send} /&amp;gt; &amp;lt;/div&amp;gt; ); } } export default ChatInput; 然后，我们将为新的输入组件定义一些样式。 这非常简单：
+.ChatInput { width: 95%; display: block; margin: auto; input { padding: 10px; margin: 0; font-size: 16px; border: none; border-radius: 5px; border: 1px solid rgba(0, 0, 0, 0.</description>
+    </item>
+    
+    <item>
+      <title>使用 Go 和 ReactJS 构建聊天系统(六)：Docker 化后端</title>
+      <link>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E5%85%ADdocker-%E5%8C%96%E5%90%8E%E7%AB%AF/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E5%85%ADdocker-%E5%8C%96%E5%90%8E%E7%AB%AF/</guid>
+      <description>项目完整源码
+ 在本节中，我们将专注于将 Docker 添加到我们的后端应用程序中。
+您现在可能会问为什么我们要这样做？ 因为在我们研究身份验证，负载平衡和部署之类的东西之前，最好有一种使用容器化技术来部署我们的应用程序的标准方法。
+为什么选择 Docker ? 如果这是您第一次了解 Docker 和容器化技术，那么您可能会质疑我们为什么使用它？
+对我来说，主要的原因之一是它使部署变得非常容易。您可以将基于 Docker 的应用程序部署到支持 Docker 的任何服务器或平台。
+这意味着无论您将其部署到何处，都可以使用单个命令来启动应用程序。
+不仅如此，它还消除了「它可以在我的机器上工作」的问题，因为在 Dockerfile 中，您指定了应用程序启动所需的确切环境。
+开始 您需要做的第一件事是在您的机器上安装 Docker。这可以在这里完成: Docker - 开始
+一旦您安装了 docker 并使其在本地运行，我们就可以深入创建 Dockerfile 了：
+FROM golang:1.11.1-alpine3.8 RUN mkdir /app ADD . /app/ WORKDIR /app RUN go mod download RUN go build -o main ./... CMD [&amp;quot;/app/main&amp;quot;] 定义 Dockerfile 后，我们可以继续使用 docker cli 构建我们的 Docker 镜像：
+ 注意： 如果您的网络速度很慢，则下一条命令可能需要一段时间才能执行，但是由于缓存，后续命令的执行速度会大大提高。
+ $ docker build -t backend .</description>
+    </item>
+    
+    <item>
+      <title>使用 Go 和 ReactJS 构建聊天系统(四)：处理多个客户端</title>
+      <link>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E5%9B%9B%E5%A4%84%E7%90%86%E5%A4%9A%E4%B8%AA%E5%AE%A2%E6%88%B7%E7%AB%AF/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E5%9B%9B%E5%A4%84%E7%90%86%E5%A4%9A%E4%B8%AA%E5%AE%A2%E6%88%B7%E7%AB%AF/</guid>
+      <description>是时候实现处理多个客户端并向每个连接的客户端广播任何收到的消息的功能了。本节结束后，我们将：
+ 实现 Pool 机制，该机制将有效地使我们能够跟踪到 WebSocket 服务器中的连接数。 我们还可以将任何收到的消息广播到连接池中的所有连接。 当另一个客户端连接或断开连接时，我们还可以通知现有所有的客户端。  在本节完成后，我们的应用程序将像下面一样:
+拆分我们的 Websocket 代码 既然我们已经完成了必要的内部清理工作，那么我们可以继续改进代码库。我们将把一些应用程序分成多个子包，以便于开发。
+现在，理想情况下，您的 main.go 文件应该只是 Go 应用程序的入口点，应该相当小，并可以调用项目中的其他软件包。
+ 注意： 我们将基于非官方的 Go 项目标准来进行项目布局 —— golang-standards/project-layout
+ 让我们在 backend 目录中创建一个名为 pkg / 的新目录。在其中，我们将要创建另一个名为 websocket / 的目录，其中将包含一个 websocket.go 文件。
+我们将把目前在 main.go 文件中拥有的许多 WebSocket 特定代码移至新的 websocket.go 文件中。
+ 注意： 不过要注意的一件事是，当我们复制函数时，我们需要将要在项目的其余部分中显示的每个函数的首字母大写。
+ package websocket import ( &amp;quot;fmt&amp;quot; &amp;quot;io&amp;quot; &amp;quot;log&amp;quot; &amp;quot;net/http&amp;quot; &amp;quot;github.com/gorilla/websocket&amp;quot; ) var upgrader = websocket.Upgrader{ ReadBufferSize: 1024, WriteBufferSize: 1024, CheckOrigin: func(r *http.</description>
+    </item>
+    
+    <item>
+      <title>使用 Go 和 ReactJS 构建聊天系统(简介)</title>
+      <link>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B/</guid>
+      <description>课程目标 本项目中，我们将使用 Go 作为后端，React.JS 作为前端来构建一个聊天系统。
+本课程将帮助你巩固 Go 并发的概念和技术，并提供你开发更复杂的 Go 应用程序的实际经验，希望能让你熟练的编写常用的 Go 程序。
+课程方式 我们将逐步构建这个聊天应用程序，以确保让你轻松愉快的学习整个课程。
+随着我们课程的进展，我将介绍越来越多的高级 Go 语言技术，以及它们是如何在本项目中应用的，在这个项目结束的时候，你应该会成为一个称职的 Go 语言开发者。
+涵盖的主题  初始化项目 使用 gorilla/websocket 包搭建 WebSockets Goroutines 和并发基础 安全的并发通信 使用 ReactJS 进行前端开发 使用 Docker 部署应用  完全免费 这门课最大的优点是完全免费。这将意味着更多的人可以从中学习。
+成果预览 在这门课结束时，你应该有一个这样的应用程序:
+ 本文译自tutorialedge
+ </description>
+    </item>
+    
+    <item>
+      <title>如何用GVM管理Go项目</title>
+      <link>https://beian.miit.gov.cn/post/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8gvm%E7%AE%A1%E7%90%86go%E9%A1%B9%E7%9B%AE/</link>
+      <pubDate>Mon, 13 Jan 2020 10:35:34 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8gvm%E7%AE%A1%E7%90%86go%E9%A1%B9%E7%9B%AE/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;使用 Go 版本管理器管理多个版本的 Go 语言环境及其模块&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.learnku.com/uploads/images/201910/18/36517/ZDHqtzEHMw.png!large&#34; alt=&#34;如何用 GVM 管理 Go 项目&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Go 语言版本管理器（&lt;a href=&#34;https://github.com/moovweb/gvm&#34;&gt;GVM&lt;/a&gt;）是管理 Go 语言环境的开源工具。GVM 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初由 &lt;a href=&#34;https://github.com/jbussdieker&#34;&gt;Josh Bussdieker&lt;/a&gt; 开发，GVM（像它的对手 Ruby RVM 一样）允许你为每个项目或一组项目创建一个开发环境，分离不同的 Go 版本和包依赖关系，来提供更大的灵活性，以防不同版本造成的问题。&lt;/p&gt;
+&lt;p&gt;有几种管理 Go 包的方式，包括 Go 1.11 内置于 Go 中的 Modules。我发现GVM简单而直观，即使我不使用它来管理包，我仍然会使用它来管理不同的 Go 版本。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>php原理之对象的属性</title>
+      <link>https://beian.miit.gov.cn/post/php%E5%8E%9F%E7%90%86%E4%B9%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7/</link>
+      <pubDate>Wed, 28 Aug 2019 17:38:58 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/php%E5%8E%9F%E7%90%86%E4%B9%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;之前用easyWechat时获取的用户信息是protected的对象,使用了&lt;code&gt;\0*\0&lt;/code&gt;来获取到受保护的对象中的数据,最近在学习php底层的知识,本文讲述了为什么&lt;code&gt;\0*\0&lt;/code&gt;能获取到受保护的数据&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;对象的结构&#34;&gt;对象的结构&lt;/h2&gt;
+&lt;p&gt;在php中,一个对象,还是以一个zval做为载体的&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;typedef union _zvalue_value {
+    long lval;
+    double dval;
+    struct {
+        char *val;
+        int len;
+    } str;
+    HashTable *ht;
+    zend_object_value obj;
+} zvalue_value;
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>解决mac command not found</title>
+      <link>https://beian.miit.gov.cn/post/%E8%A7%A3%E5%86%B3mac-command-not-found/</link>
+      <pubDate>Thu, 22 Aug 2019 12:08:44 +0000</pubDate>
+      
+      <guid>https://beian.miit.gov.cn/post/%E8%A7%A3%E5%86%B3mac-command-not-found/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;最近在配置mac的环境变量后,系统的所有命令都失效了,提示mac command not found,在此记录解决方&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;1先让命令暂时可用&#34;&gt;1.先让命令暂时可用&lt;/h4&gt;
+&lt;p&gt;命令如下&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export PATH=/usr/bin:/usr/sbin:/bin:/sbin:/usr/X11R6/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;命令执行后不要关闭终端或者cd /usr/bin 下执行vi命令否则会再次失效&lt;/p&gt;</description>
     </item>
     
     <item>

@@ -2,27 +2,23 @@
 
 <head>
     
-<title>使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘</title>
+<title>php原理之对象的属性 - 摸鱻的池塘</title>
 
-<meta property="og:title" content="使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目 - 摸鱻的池塘">
-
-
-
-    
+<meta property="og:title" content="php原理之对象的属性 - 摸鱻的池塘">
 
 
 
     
-    <meta property="description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
-    <meta property="og:description" content="我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。
-[&amp;hellip;] 在本节课程结束后，你将得到:
-[&amp;hellip;] 实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。
-[&amp;hellip;] 为了完成本系列教程，您需要做以下准备工作。
-[&amp;hellip;] 如果您熟悉 Go，这一 &amp;hellip;">
+
+
+
+    
+    <meta property="description" content="之前用easyWechat时获取的用户信息是protected的对象,使用了\0*\0来获取到受保护的对象中的数据,最近在学习php底层的知识,本文讲述了为什么\0*\0能获取到受保护的数据
+[&amp;hellip;] 在php中,一个对象,还是以一个zval做为载体的
+typedef union _zvalue_value { long lval; double dval; struct { char &amp;hellip;">
+    <meta property="og:description" content="之前用easyWechat时获取的用户信息是protected的对象,使用了\0*\0来获取到受保护的对象中的数据,最近在学习php底层的知识,本文讲述了为什么\0*\0能获取到受保护的数据
+[&amp;hellip;] 在php中,一个对象,还是以一个zval做为载体的
+typedef union _zvalue_value { long lval; double dval; struct { char &amp;hellip;">
     
 
 
@@ -106,11 +102,11 @@
                                 <div class="post-container">
                                     <div class="post-header">
                                         <h2 class="post-title">
-                                            <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE/">使用 Go 和 ReactJS 构建聊天系统(一)：初始化项目</a>
+                                            <a href="/post/php%E5%8E%9F%E7%90%86%E4%B9%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7/">php原理之对象的属性</a>
                                         </h2>
                                         
                                         <div class="post-byline">Published on
-                                            <a class="date" href="javascript:;">2020/01/13</a>
+                                            <a class="date" href="javascript:;">2019/08/28</a>
                                             
                                             
                                             
@@ -119,90 +115,43 @@
                                         
                                     </div>
                                     <div class="post-content">
-                                        <p>我们将通过设置我们的两个项目来开始这门课程。一旦我们完成了这些枯燥的设置，我们就可以开始添加新的功能，构建我们的应用程序，并看到一些成果。</p>
-<h1 id="目标">目标</h1>
-<p>在本节课程结束后，你将得到:</p>
-<ul>
-<li>在  <code>backend/</code> 目录创建的基本的 Go 应用。</li>
-<li>在 <code>frontend/</code> 目录创建的基本的 ReactJS 应用。</li>
-</ul>
-<p>实现了这两个目标之后，您将能够在本课程的以下部分开始向聊天系统中添加功能。</p>
-<h1 id="准备工作">准备工作</h1>
-<p>为了完成本系列教程，您需要做以下准备工作。</p>
-<ul>
-<li>你需要安装 <code>npm</code>。</li>
-<li>你需要安装 <code>npx</code>。它可以通过 <code>npm install -g npx</code> 来安装。</li>
-<li>你的 Go 版本需要高于 1.11。</li>
-<li>您将需要一个代码编辑器，如 Visual Studio。</li>
-</ul>
-<h1 id="设置-go-项目">设置 Go 项目</h1>
-<p>如果您熟悉 Go，这一步相当简单，我们将在项目目录中创建一个名为 <code>backend</code> 的目录。</p>
-<p>这个 <code>backend</code> 目录将存放这个项目的所有 Go 代码。然后，我们将通过以下命令来初始化我们的项目：:</p>
-<pre><code>$ cd backend
-$ GO111MODULE=on
-$ go mod init github.com/TutorialEdge/realtime-chat-go-react
-</code></pre><p>应该在 backend 目录中使用 go mod 初始化我们的项目，初始化之后我们就可以开始写项目并使其成为一个完整的 Go 应用程序。</p>
-<p>一旦你执行了这些命令，你就应该在 <code>backend/</code> 目录下看到两个新生成的文件。它们分别是 <code>go.mod</code> 和 <code>go.sum</code> 文件。</p>
-<ul>
-<li><strong>go.mod</strong> - 这个文件有点像 NodeJS 项目中的 package.json。它详细描述了我们项目所需的包和版本，以便项目的构建和运行。</li>
-<li><strong>go.sum</strong> - 这个文件用于校验，它记录了每个依赖库的版本和校验码。</li>
-</ul>
-<blockquote>
-<p><strong>注意 -</strong> 如果想要了解更多关于 Go modules 的新特性，请访问官方 Wiki: <a href="https://github.com/golang/go/wiki/Modules">Go Modules</a></p>
+                                        <blockquote>
+<p>之前用easyWechat时获取的用户信息是protected的对象,使用了<code>\0*\0</code>来获取到受保护的对象中的数据,最近在学习php底层的知识,本文讲述了为什么<code>\0*\0</code>能获取到受保护的数据</p>
 </blockquote>
-<h2 id="检查">检查</h2>
-<p>一旦我们在 <code>backend/</code> 目录中调用了 <code>go mod init</code>，我们将检查程序是否正常工作。</p>
-<p>在 <code>backend/</code> 目录中添加新文件 <code>main.go</code>，并添加以下代码:</p>
-<pre><code>package main
-
-import &quot;fmt&quot;
-
-func main() {
-  fmt.Println(&quot;Chat App v0.01&quot;)
+<h2 id="对象的结构">对象的结构</h2>
+<p>在php中,一个对象,还是以一个zval做为载体的</p>
+<pre><code>typedef union _zvalue_value {
+    long lval;
+    double dval;
+    struct {
+        char *val;
+        int len;
+    } str;
+    HashTable *ht;
+    zend_object_value obj;
+} zvalue_value;
+</code></pre><p>如果,一个zval是对象,那么zvalue_value中的对象,就指向一个zend_object_value的实例。一个zend_object_value包含两个成员,一个是标识符(整形序号),表明了当前对象存储在全局对象列表的位置,另外还有一个zend_object_handlers指针,指向当前对象所属类的handlers(标准操作集合).
+真正的对象实体,zend_object中,保存了如下的关键信息入口:</p>
+<pre><code>1.ce,zend_class_entry 类入口
+2.properties,hashTable普通属性集
+</code></pre><h2 id="对象的属性">对象的属性</h2>
+<p>如上所述,普通属性是一个hashTable,在PHP5以后,引入了访问权限控制,而访问权限属性,是通过属性名进行区分的(为此Zend引入了zend_mangle_property_name)</p>
+<pre><code>1.public 属性名
+2.private \0类名\0属性名
+3.protected \0*\0属性名
+</code></pre><p>PHP通过这种方式,实现了对属性访问权限的标识,所以我们如果想要访问对象的私有/保护属性可以:</p>
+<pre><code>class Test{
+    private $_name1 = &quot;private&quot;;
+    protected $_name2 = &quot;protected&quot;;
 }
-</code></pre><p>保存文件, 尝试运行它：</p>
-<pre><code>$ go run main.go
-Chat App v0.01
-</code></pre><p>很好，如果运行成功，我们就可以继续设置前端应用了。</p>
-<h1 id="设置我们的-react-前端">设置我们的 React 前端</h1>
-<p>设置我们的前端稍微复杂一些，首先，我们将在项目的根目录中创建另一个目录，名为 <code>frontend</code>，我们在这个目录中存放所有 ReactJS 代码。</p>
-<blockquote>
-<p><strong>注意 -</strong> 我们将会使用 <a href="https://github.com/facebook/create-react-app">facebook/create-react-app</a> 来生成 React 前端。</p>
-</blockquote>
-<pre><code>$ cd frontend
-</code></pre><p>然后使用 <code>create-react-app</code> 包来创建一个新的 ReactJS 应用。 可以使用 <code>npm</code> 来安装:</p>
-<pre><code>$ npm install -g create-react-app
-</code></pre><p>安装之后，可以使用以下命令创建新的 ReactJS 应用程序：</p>
-<pre><code>$ npx create-react-app .
-</code></pre><p>运行这些命令之后，你应该可以看到我们的 <code>frontend/</code> 目录生成了基本的 ReactJS 应用程序。</p>
-<p>我们的目录结构如下:</p>
-<pre><code>node_modules/
-public/
-src/
-.gitignore
-package.json
-README.md
-yarn.lock
-</code></pre><h2 id="在本地运行-reactjs-应用程序">在本地运行 ReactJS 应用程序</h2>
-<p>现在你应该成功创建了基础的 ReactJS 应用，是时候测试一下了。使用下面的命令尝试运行：</p>
-<pre><code>$ npm start
-</code></pre><p>如果一切按计划进行，你将看到 ReactJS 应用程序已经编译完毕，并且已经运行在本地服务器上，可以通过访问 <code>http://localhost:3000</code> 来查看:</p>
-<pre><code>Compiled successfully!
-
-You can now view frontend in the browser.
-
-  Local:            http://localhost:3000/
-  On Your Network:  http://192.168.1.234:3000/
-
-Note that the development build is not optimized.
-To create a production build, use yarn build.
-</code></pre><p>很好，您现在有了一个基本的 ReactJS，可以在本教程系列的下一部分中进行扩展。</p>
-<h1 id="总结">总结</h1>
-<p>太棒了，你现在已经成功地设置了我们项目的前端和后端，我们可以开始添加新的功能了。</p>
-<blockquote>
-<p>本文译自<a href="https://tutorialedge.net/projects/chat-system-in-go-and-react/">tutorialedge</a></p>
-</blockquote>
-
+$test = new Test();
+$arr = (array)$test;
+var_dump($arr[&quot;\0Test\0_name1&quot;]);
+var_dump($arr[&quot;\0*\0_name2&quot;]);
+//输出
+string(7) &quot;private&quot;
+string(9) &quot;protected&quot;
+</code></pre><p><code>参考自鸟哥博客</code><a href="http://www.laruence.com">http://www.laruence.com</a></p>
 
                                         
                                         
@@ -223,13 +172,13 @@ To create a production build, use yarn build.
                                             
                                             <div class="previous">
                                                 <span>&lt;&lt; Prev</span>
-                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E4%B8%89%E8%AE%BE%E8%AE%A1%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E7%AB%AF/"
-                                                    rel="prev">使用 Go 和 ReactJS 构建聊天系统(三)：设计我们的前端</a> </div>
+                                                <a href="/post/%E8%A7%A3%E5%86%B3mac-command-not-found/"
+                                                    rel="prev">解决mac command not found</a> </div>
                                             
                                             
                                             <div class="next">
                                                 <span>Next >></span>
-                                                <a href="/post/%E4%B8%80%E6%96%87%E8%AF%A6%E8%A7%A3%E5%BE%AE%E6%9C%8D%E5%8A%A1/">一文详解微服务</a> 
+                                                <a href="/post/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8gvm%E7%AE%A1%E7%90%86go%E9%A1%B9%E7%9B%AE/">如何用GVM管理Go项目</a> 
                                             </div>
                                             
                                         </nav>

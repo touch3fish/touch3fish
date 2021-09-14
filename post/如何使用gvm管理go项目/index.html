@@ -1,0 +1,452 @@
+<html lang="en-US">
+
+<head>
+    
+<title>如何用GVM管理Go项目 - 摸鱻的池塘</title>
+
+<meta property="og:title" content="如何用GVM管理Go项目 - 摸鱻的池塘">
+
+
+
+    
+
+
+
+    
+    <meta property="description" content="使用 Go 版本管理器管理多个版本的 Go 语言环境及其模块
+[&amp;hellip;] Go 语言版本管理器（GVM）是管理 Go 语言环境的开源工具。GVM 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初由 Josh Bussdieker 开发，GVM（像它的对手 Ruby RVM 一样）允许你为每个项目或一组项目创建一个开发环境，分离不同的 Go 版本和包依赖关系，来提 &amp;hellip;">
+    <meta property="og:description" content="使用 Go 版本管理器管理多个版本的 Go 语言环境及其模块
+[&amp;hellip;] Go 语言版本管理器（GVM）是管理 Go 语言环境的开源工具。GVM 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初由 Josh Bussdieker 开发，GVM（像它的对手 Ruby RVM 一样）允许你为每个项目或一组项目创建一个开发环境，分离不同的 Go 版本和包依赖关系，来提 &amp;hellip;">
+    
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link rel="shortcut icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAl2chF0OuqvNKaMXWlh9GPn5vlHpSl0pXgQ&amp;usqp=CAU" type="image/x-icon" />
+
+
+
+<link rel="stylesheet" href="/css/style.min.css" />
+
+<link rel="stylesheet" href="/css/reset.min.css" />
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+
+<link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/an-old-hope.min.css" rel="stylesheet" />
+
+
+
+</head>
+
+<body id="period" class="home blog">
+    <a class="skip-content" href="#main">Press "Enter" to skip to content</a>
+    <div id="overflow-container" class="overflow-container">
+        <header class="site-header" id="site-header" role="banner">
+    <div class="max-width">
+        <div id="title-container" class="title-container">
+            <div id="site-title" class="site-title"><a href="/">摸鱻的池塘</a></div>
+            <p class="tagline">左手代码右手鱼</p>
+        </div>
+        
+        <div id="menu-primary-container" class="menu-primary-container">
+            <div class="icon-container">
+            </div>
+            <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+                <nav class="menu">
+                    <ul id="menu-primary-items" class="menu-primary-items">
+                        
+                        
+                        <li id="menu-item-0"
+                            class="menu-item menu-item-type-custom menu-item-object-custom ">
+                            <a href="/" aria-current="page" tabindex="0">主页</a></li>
+                        
+                        <li id="menu-item-1"
+                            class="menu-item menu-item-type-custom menu-item-object-custom ">
+                            <a href="/post/" aria-current="page" tabindex="1">文章</a></li>
+                        
+                        <li id="menu-item-2"
+                            class="menu-item menu-item-type-custom menu-item-object-custom ">
+                            <a href="/about/" aria-current="page" tabindex="2">关于</a></li>
+                        
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+        <div id="primary-container" class="primary-container">
+            <div class="max-width">
+                <section id="main" class="main" role="main">
+                    <div id="loop-container" class="loop-container">
+                        <div
+                            class="post type-post status-publish format-standard hentry entry">
+                            <article>
+                                <div class="post-container">
+                                    <div class="post-header">
+                                        <h2 class="post-title">
+                                            <a href="/post/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8gvm%E7%AE%A1%E7%90%86go%E9%A1%B9%E7%9B%AE/">如何用GVM管理Go项目</a>
+                                        </h2>
+                                        
+                                        <div class="post-byline">Published on
+                                            <a class="date" href="javascript:;">2020/01/13</a>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                        
+                                    </div>
+                                    <div class="post-content">
+                                        <blockquote>
+<p>使用 Go 版本管理器管理多个版本的 Go 语言环境及其模块</p>
+</blockquote>
+<p><img src="https://cdn.learnku.com/uploads/images/201910/18/36517/ZDHqtzEHMw.png!large" alt="如何用 GVM 管理 Go 项目"></p>
+<p>Go 语言版本管理器（<a href="https://github.com/moovweb/gvm">GVM</a>）是管理 Go 语言环境的开源工具。GVM 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初由 <a href="https://github.com/jbussdieker">Josh Bussdieker</a> 开发，GVM（像它的对手 Ruby RVM 一样）允许你为每个项目或一组项目创建一个开发环境，分离不同的 Go 版本和包依赖关系，来提供更大的灵活性，以防不同版本造成的问题。</p>
+<p>有几种管理 Go 包的方式，包括 Go 1.11 内置于 Go 中的 Modules。我发现GVM简单而直观，即使我不使用它来管理包，我仍然会使用它来管理不同的 Go 版本。</p>
+<h2 id="安装-gvm">安装 GVM</h2>
+<p>安装 GVM 很简单。<a href="https://github.com/moovweb/gvm#installation">GVM库</a>安装文档指导您下载安装脚本并将其导入 Bash。</p>
+<p><code>bash &lt; &lt;(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)</code></p>
+<p>尽管越来越多的人采用这种安装方法，但最好还是在安装之前先看看安装程序在做什么。以 GVM 为例，安装脚本执行过程：</p>
+<ol>
+<li>检查相关依赖</li>
+<li>克隆 GVM 库</li>
+<li>使用 shell 脚本:
+<ul>
+<li>安装 Go 语言</li>
+<li>管理 GOPATH 环境变量</li>
+<li>在 bashrc 、zshrc 或配置文件中添加一行内容</li>
+</ul>
+</li>
+</ol>
+<p>如果您想再次检查它在做什么，您可以克隆库并检查 shel l脚本，然后运行 <code>./binscripts/gvm-installer</code> 使用本地脚本进行设置。</p>
+<p><em>注意:</em> 由于 GVM 可用于下载和编译新的 Go 版本，因此会有一些预期的依赖项，如 Make，Git 和 Curl。你可以在<a href="https://github.com/moovweb/gvm/blob/master/README.md">GVM 的 README</a> 中找到完整的发行版列表。</p>
+<h2 id="使用-gvm-安装和管理-go-版本">使用 GVM 安装和管理 Go 版本</h2>
+<p>一旦安装了 GVM，您就可以开始使用它来安装和管理不同版本的 Go。<code>gvm listall</code> 命令显示了可以下载和编译的可用的 Go 版本：</p>
+<pre><code>[chris@marvin ]$ gvm listall
+$ gvm listall
+
+gvm gos (available)
+
+   go1
+   go1.0.1
+   go1.0.2
+   go1.0.3
+
+&lt;输出截断&gt;
+</code></pre><p>安装特定的 Go 版本就想 <code>gvm install &lt;version&gt;</code> 一样简单，其中 <code>&lt;version&gt;</code> 是 <code>gvm install</code> 命令返回的版本之一。</p>
+<p>假设您正在处理一个使用 Go 1.12.8 版本的项目。你可以使用 <code>gvm install go1.12.8</code> 命令来安装这个版本:</p>
+<pre><code>[chris@marvin]$ gvm install go1.12.8
+Installing go1.12.8...
+ * Compiling...
+go1.12.8 successfully installed!
+</code></pre><p>输入 <code>gvm list</code>，你会看到 Go 1.12.8 版本与系统 Go 版本（使用操作系统的软件包管理器打包的版本）同时存在：</p>
+<pre><code>[chris@marvin]$ gvm list
+gvm gos (installed)
+   go1.12.8
+=&gt; system
+</code></pre><p>GVM 仍然再使用系统的 Go 版本，通过它旁边的 <strong>=&gt;</strong> 符号来表示。你可以使用 <code>gvm use</code> 命令来切换到新安装的 go1.12.8版本：</p>
+<pre><code>[chris@marvin]$ gvm use go1.12.8
+Now using version go1.12.8
+[chris@marvin]$ go version
+go version go1.12.8 linux/amd64
+</code></pre><p>GVM使管理已安装的Go版本变得极其简单，但它不止如此！</p>
+<h2 id="使用-gvm-pkgset">使用 GVM pkgset</h2>
+<p>在开箱即用的情况下，Go 以一种出色而又令人沮丧的方式管理包和模块。默认情况下，如果你 <code>go get</code> 获取一个包，它会被下载到  <code>$GOPATH</code> 目录中的 <code>src</code> 和 <code>pkg</code> 目录下；然后你可以使用 <code>import</code> 将其引入到你的 Go 程序中。这使得获取包变得很容易，特别是对于没有特权的用户，不需要 <code>sudo</code> 或 root 特权(很像 Python 中的<code>pip install --user</code>)。然而，在不同的项目中管理相同包的不同版本是困难的。</p>
+<p>有许多方法可以尝试修复或缓解这个问题，包括实验性的 Go Modules (在 Go v1.11 版本中增加了初步支持)和 <a href="https://golang.github.io/dep/">Go dep</a>(一个「官方实验」，被正在被 Go Modules 所替代)。在我发现GVM之前，为了确保隔离，我会在自己的Docker容器中构建和测试Go项目。</p>
+<p>GVM 通过使用「pkgsets」将项目的新目录附加到 Go 安装版本的默认 <code>$GOPATH</code>，很像在 Unix/Linux 系统上工作的<code>$PATH</code>，很好地完成了项目之间包的管理和隔离。</p>
+<p>很容易想象这是如何运行的。首先，安装新版本的Go 1.12.9：</p>
+<pre><code>[chris@marvin]$ echo $GOPATH
+/home/chris/.gvm/pkgsets/go1.12.8/global
+[chris@marvin]$ gvm install go1.12.9
+Installing go1.12.9...
+ * Compiling...
+go1.12.9 successfully installed
+[chris@marvin]$ gvm use go1.12.9
+Now using version go1.12.9
+</code></pre><p>当 GVM 被告知使用一个新版本时，它将会更换一个新的 <code>$GOPATH</code>，<strong>gloabl</strong> pkgset 将默认使用该版本：</p>
+<pre><code>[chris@marvin]$ echo $GOPATH
+/home/chris/.gvm/pkgsets/go1.12.9/global
+[chris@marvin]$ gvm pkgset list
+gvm go package sets (go1.12.9)
+=&gt;  global
+</code></pre><p>尽管默认情况下没有安装额外的包，但是 global pkgset 中的包对于使用这个特定版本 Go 的任何项目都是可用的。</p>
+<p>现在，假设您正在启动一个新项目，它需要一个特定的包。首先，使用 GVM 创建一个名为 <code>introToGvm</code> 的新的pkgset：</p>
+<pre><code>[chris@marvin]$ gvm pkgset create introToGvm
+[chris@marvin]$ gvm pkgset use introToGvm
+Now using version go1.12.9@introToGvm
+[chris@marvin]$ gvm pkgset list
+gvm go package sets (go1.12.9)
+    global
+=&gt;  introToGvm
+</code></pre><p>如上所述，pkgset 的一个新目录被添加到 <code>$GOPATH</code>：</p>
+<pre><code>[chris@marvin]$ echo $GOPATH
+/home/chris/.gvm/pkgsets/go1.12.9/introToGvm:/home/chris/.gvm/pkgsets/go1.12.9/global
+</code></pre><p>将目录更改为预先设置的 <code>introToGvm</code> 路径，并检查目录结构，然后利用这个机会体验一下 <code>awk</code> 和 <code>bash</code> 的乐趣:</p>
+<pre><code>[chris@marvin]$ cd $( awk -F':' '{print $1}' &lt;&lt;&lt; $GOPATH )
+[chris@marvin]$ pwd
+/home/chris/.gvm/pkgsets/go1.12.9/introToGvm
+[chris@marvin]$ ls
+overlay  pkg  src
+</code></pre><p>注意，新目录看起来很像普通的 <code>$GOPATH</code>。新的 Go 包可以使用与 Go 相同的 <code>Go get</code> 下载命令，且被添加到 pkgset中。</p>
+<p>例如，使用以下代码获得 <code>gorilla/mux</code> 包，然后检查 pkgset：</p>
+<pre><code>[chris@marvin]$ go get github.com/gorilla/mux
+[chris@marvin]$ tree
+[chris@marvin introToGvm ]$ tree
+.
+├── overlay
+│   ├── bin
+│   └── lib
+│       └── pkgconfig
+├── pkg
+│   └── linux_amd64
+│       └── github.com
+│           └── gorilla
+│               └── mux.a
+src/
+└── github.com
+    └── gorilla
+        └── mux
+            ├── AUTHORS
+            ├── bench_test.go
+            ├── context.go
+            ├── context_test.go
+            ├── doc.go
+            ├── example_authentication_middleware_test.go
+            ├── example_cors_method_middleware_test.go
+            ├── example_route_test.go
+            ├── go.mod
+            ├── LICENSE
+            ├── middleware.go
+            ├── middleware_test.go
+            ├── mux.go
+            ├── mux_test.go
+            ├── old_test.go
+            ├── README.md
+            ├── regexp.go
+            ├── route.go
+            └── test_helpers.go
+</code></pre><p>如您所见，<code>gorilla/mux</code> 按照预期添加到了 pkgset  的 <code>$GOPATH</code> 目录，现在它可以与使用该 pkgset 的项目一起使用了。</p>
+<h2 id="gvm-让-go-管理变得轻而易举">GVM 让 Go 管理变得轻而易举</h2>
+<p>GVM 是以一种直观的、非侵入性的方式来管理 Go 版本和包的。它可以单独使用，也可以使用 GVM 的 Go 版本管理功能与其他 Go 模块管理技术结合使用。通过 Go 版本和包依赖关系隔离项目使开发更容易，并减少了管理版本冲突的复杂性，而GVM使这变得轻而易举。</p>
+<blockquote>
+<p>本文译自 <a href="https://opensource.com/article/19/10/go-introduction-gvm">opensource</a></p>
+</blockquote>
+
+                                        
+                                        
+                                        
+                                        
+                                    </div>
+
+                                    
+                                    
+                                    
+
+                                    
+                                    <div class="post-meta">
+                                        
+                                        
+                                        
+                                        <nav class="further-reading">
+                                            
+                                            <div class="previous">
+                                                <span>&lt;&lt; Prev</span>
+                                                <a href="/post/php%E5%8E%9F%E7%90%86%E4%B9%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7/"
+                                                    rel="prev">php原理之对象的属性</a> </div>
+                                            
+                                            
+                                            <div class="next">
+                                                <span>Next >></span>
+                                                <a href="/post/%E4%BD%BF%E7%94%A8-go-%E5%92%8C-reactjs-%E6%9E%84%E5%BB%BA%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B/">使用 Go 和 ReactJS 构建聊天系统(简介)</a> 
+                                            </div>
+                                            
+                                        </nav>
+                                    </div>
+                                    
+                                    
+
+                                    
+                                    
+                                    <div style="width: 100%;height: 1px;border:1px solid #f8f8f8;margin: 50px 0 30px;"></div>
+                                    <script src="https://utteranc.es/client.js"
+                                            repo="{org}/{repo}"
+                                            issue-term="title"
+                                            theme="github-light"
+                                            crossorigin="anonymous"
+                                            async>
+                                    </script>
+                                    
+                                    
+
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+                <aside class="sidebar sidebar-primary" id="sidebar-primary" role="complementary">
+    <h1 class="screen-reader-text">Sidebar</h1>
+    
+
+    
+    
+    <section id="text-2" class="widget widget_text">
+        <div class="textwidget">
+            
+            <div id="profile">
+                <div id="profile_picture"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAl2chF0OuqvNKaMXWlh9GPn5vlHpSl0pXgQ&amp;usqp=CAU"></div>
+                <div id="profile_intro">
+                    <p><span class="name">摸鱻</span></p>
+                    <p class="intro">A backend developer</p>
+                </div>
+            </div>
+            
+            <p>
+                <script type="text/javascript">
+                    (function ($) {
+                        $(document).ready(function () {
+                            var menuPrimaryContainer = $('#menu-primary-container');
+                            var profile = $('#text-2');
+                            $('#toggle-navigation').click(function () {
+                                if (menuPrimaryContainer.hasClass('open')) {
+                                    profile.removeClass('open');
+                                } else {
+                                    profile.addClass('open');
+                                }
+                            });
+                        });
+                    })(jQuery);
+                </script>
+            </p>
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    <section id="text-5" class="widget widget_text">
+        <h2 class="widget-title">Open Source Projects</h2>
+        <div class="textwidget">
+            <div id="projects" style="line-height: 22px;">
+                
+                <a href="https://github.com/idoubi/gonews"
+                    target="_blank">gonews</a>: &nbsp;Daily news for golang<br>
+                
+                <a href="https://github.com/idoubi/sql2struct"
+                    target="_blank">sql2struct</a>: &nbsp;Generate go struct according to SQL<br>
+                
+                <a href="https://github.com/idoubi/goz"
+                    target="_blank">goz</a>: &nbsp;Request library used in golang<br>
+                
+        </div>
+    </section>
+    
+    
+    
+    
+    
+    
+
+    
+    
+    <section id="categories-3" class="widget widget_categories">
+        <h2 class="widget-title">分类</h2>
+        <form action="/categories/" method="get"><label class="screen-reader-text"
+                for="cat">Categories</label><select name="cat" id="cat" class="postform">
+                <option value="-1">选择分类</option>
+                
+            </select>
+        </form>
+        <script type="text/javascript">
+             
+            (function () {
+                var dropdown = document.getElementById("cat");
+
+                function onCatChange() {
+                    if (dropdown.options[dropdown.selectedIndex].value != "" ) {
+                        window.location.href = dropdown.options[dropdown.selectedIndex].value
+                    }
+                }
+                dropdown.onchange = onCatChange;
+            })();
+             
+        </script>
+    </section>
+    
+    
+
+    
+    
+    <section id="tag_cloud-2" class="widget widget_tag_cloud">
+        <h2 class="widget-title">标签</h2>
+        <div class="tagcloud">
+            
+        </div>
+    </section>
+    
+    
+
+    
+    
+    <section id="text-6" class="widget widget_text">
+        <h2 class="widget-title">友情链接</h2>
+        <div class="textwidget">
+            <ul>
+                
+                <li><a href="https://gohugo.io" target="_blank">Hugo</a></li>
+                
+                <li><a href="https://github.com/idoubi/hugo-theme-period" target="_blank">Theme period</a></li>
+                
+            </ul>
+        </div>
+    </section>
+    
+    
+    
+</aside>
+            </div>
+        </div>
+
+        <footer id="site-footer" class="site-footer" role="contentinfo">
+    <div class="max-width">
+    </div>
+    <div class="footer">
+        <div id="footercontent">
+            
+            <a href="https://beian.miit.gov.cn" target="_blank">京ICP备2021023950号</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e8351b6d4626d5881d439ea1f6184baa";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+    
+    
+    </div>
+    
+</body>
+
+</html>
